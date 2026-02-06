@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  youtube-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile_chatgpt
+    container_name: youtube-bot
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - UPLOAD_SCHEDULE=${UPLOAD_SCHEDULE:-daily}
+      - UPLOAD_TIME=${UPLOAD_TIME:-18:00}
+      - LANGUAGE=${LANGUAGE:-id}
+    volumes:
+      - ./data:/app/data
+      - ./client_secrets.json:/app/client_secrets.json:ro
+      - ./token.pickle:/app/token.pickle
+    restart: unless-stopped

@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+# Install system dependencies for video processing
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements_chatgpt.txt .
+RUN pip install --no-cache-dir -r requirements_chatgpt.txt
+
+# Copy application files
+COPY config_chatgpt.py .
+COPY script_generator.py .
+COPY video_generator_chatgpt.py .
+COPY database_chatgpt.py .
+COPY youtube_uploader_chatgpt.py .
+COPY bot_chatgpt.py .
+
+# Volume for persistent data
+VOLUME ["/app/data"]
+
+CMD ["python", "-u", "bot_chatgpt.py"]
